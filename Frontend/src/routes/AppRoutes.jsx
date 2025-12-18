@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
 import Dashboard from "@/pages/dashboard/Dashboard";
@@ -11,12 +11,21 @@ import ProtectedRoute from "./ProtectedRoute";
 const AppRoutes = () => (
   <BrowserRouter>
     <Routes>
-      {/* ROOT REDIRECT */}
-      <Route path="/" element={<Navigate to="/login" replace />} />
-
+      {/* AUTH ROUTES */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
+      {/* ROOT = DASHBOARD */}
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* ALIAS ROUTE */}
       <Route
         path="/dashboard"
         element={
