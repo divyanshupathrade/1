@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
 import Dashboard from "@/pages/dashboard/Dashboard";
@@ -11,8 +11,12 @@ import ProtectedRoute from "./ProtectedRoute";
 const AppRoutes = () => (
   <BrowserRouter>
     <Routes>
+      {/* ROOT REDIRECT */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+
       <Route
         path="/dashboard"
         element={
@@ -21,6 +25,7 @@ const AppRoutes = () => (
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/planner"
         element={
@@ -29,6 +34,7 @@ const AppRoutes = () => (
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/notes"
         element={
@@ -37,6 +43,7 @@ const AppRoutes = () => (
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/analytics"
         element={
@@ -45,6 +52,7 @@ const AppRoutes = () => (
           </ProtectedRoute>
         }
       />
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>
