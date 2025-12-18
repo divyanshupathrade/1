@@ -13,7 +13,7 @@ const AppRoutes = () => (
     <Routes>
       {/* AUTH ROUTES */}
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+     <Route path="/register" element={<div>REGISTER WORKS</div>} />
 
       {/* ROOT = DASHBOARD */}
       <Route
