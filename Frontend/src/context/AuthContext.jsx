@@ -1,23 +1,47 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
+import { auth } from "@/firebase";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const login = (token) => {
-    localStorage.setItem("token", token);
-    setUser({ token });
-  };
+  const login = (email, password) =>
+    signInWithEmailAndPassword(auth, email, password);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
-  };
+  const register = (email, password) =>
+    createUserWithEmailAndPassword(auth, email, password);
+
+  const logout = () => signOut(auth);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        const token = await firebaseUser.getIdToken();
+        localStorage.setItem("token", token);
+        setUser(firebaseUser);
+      } else {
+        localStorage.removeItem("token");
+        setUser(null);
+      }
+      setLoading(false);
+    });
+
+    return unsub;
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
+    <AuthContext.Provider
+      value={{ user, login, register, logout }}
+    >
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
